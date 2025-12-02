@@ -1,0 +1,9 @@
+{
+  "name": "spotify-code-app",
+  "version": "1.0.0",
+  "description": "Web-Anwendung zum Suchen auf Spotify und Erstellen eines Bildes mit Cover und Spotify Code.",
+  "main": "server.js",
+  "scripts": {
+    "start": "call dev-env.bat && node server.js"
+  }
+}

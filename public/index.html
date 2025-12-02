@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify Cover & Code Generator</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">Spotify Toolkit</p>
+        <h1>Suche. Finde. Drucke.</h1>
+        <p class="lede">
+          Durchsuche Spotify, wähle Album, Künstler, Playlist oder Track aus und generiere ein druckfertiges Bild aus
+          Cover und Spotify Code.
+        </p>
+        <form id="search-form" class="search">
+          <div class="search__input">
+            <label for="search-query">Suche auf Spotify</label>
+            <input id="search-query" name="q" type="text" placeholder="Album, Künstler, Playlist oder Track" required />
+          </div>
+          <div class="search__types" aria-label="Filter">
+            <label><input type="checkbox" name="type" value="album" checked /> Album</label>
+            <label><input type="checkbox" name="type" value="artist" checked /> Künstler</label>
+            <label><input type="checkbox" name="type" value="playlist" checked /> Playlist</label>
+            <label><input type="checkbox" name="type" value="track" checked /> Track</label>
+          </div>
+          <button type="submit">Suchen</button>
+        </form>
+      </div>
+      <div class="hero__panel">
+        <div class="panel">Spotify-Code + Cover als Poster</div>
+        <div class="panel panel--muted">Wähle die Auflösung, lade das Motiv herunter und drucke es.</div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <header class="card__header">
+          <div>
+            <p class="eyebrow">Suchergebnisse</p>
+            <h2>Treffer</h2>
+          </div>
+          <div id="status" class="status">Bitte suche nach einem Begriff.</div>
+        </header>
+        <div id="results" class="results" aria-live="polite"></div>
+      </section>
+
+      <section class="card">
+        <header class="card__header">
+          <div>
+            <p class="eyebrow">Suchverlauf</p>
+            <h2>Zuletzt gesucht</h2>
+          </div>
+          <button id="clear-history" class="link">Verlauf löschen</button>
+        </header>
+        <div id="history" class="history" aria-live="polite"></div>
+      </section>
+
+      <section class="card" id="detail-card" hidden>
+        <header class="card__header">
+          <div>
+            <p class="eyebrow">Ausgewähltes Element</p>
+            <h2 id="detail-title">Cover & Code</h2>
+          </div>
+          <a id="detail-link" class="link" target="_blank" rel="noreferrer">Auf Spotify öffnen</a>
+        </header>
+
+        <div class="detail">
+          <div class="detail__preview">
+            <img id="detail-cover" alt="Album Cover" />
+            <img id="detail-code" alt="Spotify Code" />
+          </div>
+          <div class="detail__settings">
+            <div class="form-control">
+              <label for="resolution">Auflösung</label>
+              <select id="resolution">
+                <option value="1080x1920">1080 x 1920 (Poster Hochformat)</option>
+                <option value="1200x1200">1200 x 1200 (Quadrat)</option>
+                <option value="1600x900">1600 x 900 (Querformat)</option>
+                <option value="2480x3508">2480 x 3508 (A4 @ 300 DPI)</option>
+                <option value="3508x4961">3508 x 4961 (A3 @ 300 DPI)</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label for="custom-width">Individuelle Breite (px)</label>
+              <input id="custom-width" type="number" min="300" step="10" placeholder="z.B. 2000" />
+            </div>
+            <div class="form-control">
+              <label for="custom-height">Individuelle Höhe (px)</label>
+              <input id="custom-height" type="number" min="300" step="10" placeholder="z.B. 3000" />
+            </div>
+            <button id="download" class="primary">Bild generieren & herunterladen</button>
+            <p class="hint">Das Bild wird als PNG exportiert. Cover und Spotify Code werden automatisch zentriert.</p>
+            <div id="message" class="message" role="status"></div>
+          </div>
+        </div>
+        <canvas id="canvas" class="canvas" hidden></canvas>
+      </section>
+    </main>
+
+    <footer class="footer">Entwickelt für Spotify Fans – Cover & Code zum Ausdrucken.</footer>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
