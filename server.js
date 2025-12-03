@@ -117,8 +117,9 @@ function mapItem(item, type) {
     base.coverUrl = item.images?.[0]?.url;
     base.subtitle = 'Artist';
   } else if (type === 'playlist') {
-    base.coverUrl = item.images?.[0]?.url;
-    base.subtitle = item.owner?.display_name ? `Playlist • ${item.owner.display_name}` : 'Playlist';
+    // TODO: Fix item, owner missing from time to time
+    // base.coverUrl = item.images?.[0]?.url;
+    // base.subtitle = item.owner?.display_name ? `Playlist • ${item.owner.display_name}` : 'Playlist';
   }
 
   base.codeUrl = base.uri ? buildCodeUrl(base.uri) : null;
@@ -163,9 +164,9 @@ async function handleSearch(req, res, urlObj) {
   if (data.artists?.items) {
     data.artists.items.forEach((item) => results.push(mapItem(item, 'artist')));
   }
-  // if (data.playlists?.items) {
-  //   data.playlists.items.forEach((item) => results.push(mapItem(item, 'playlist')));
-  // }
+  if (data.playlists?.items) {
+    data.playlists.items.forEach((item) => results.push(mapItem(item, 'playlist')));
+  }
   if (data.tracks?.items) {
     data.tracks.items.forEach((item) => results.push(mapItem(item, 'track')));
   }
