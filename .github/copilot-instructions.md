@@ -24,12 +24,13 @@ Spotify Cover & Code Generator is a web app that searches Spotify for albums, ar
 - **Stateful UI:** Tracks selected item in `selectedItem` variable between search and generation phases
 - **Two-phase workflow:** (1) Search/browse results, (2) Select item → customize resolution → generate composite
 - **LocalStorage history:** Persists last 10 searches under `spotify-search-history` key
-- **Canvas rendering:** `generateComposite()` centers cover and code images on white background with metadata text
+- **Canvas rendering:** `generateComposite()` centers cover with both Spotify code and URL QR-code on white background with metadata text
+- **QR-Code generation:** Uses QRCode.js library to generate URL QR-codes dynamically (via `generateQRCodeImage()`)
 
 **Search flow:**
 ```
 form submission → performSearch() → fetch /api/search → renderResults() → user clicks item
-→ selectItem() → detailCard reveals → user adjusts resolution → generateComposite()
+→ selectItem() → detailCard reveals with preview QR-codes → user adjusts resolution → generateComposite()
 ```
 
 ---
@@ -69,9 +70,10 @@ This ensures the UI can render any type with a single template.
 ### Image Composition Formula (Canvas Rendering)
 The `generateComposite()` function uses proportional sizing:
 - Cover takes 55% of height (centered, square aspect ratio)
-- Gap between cover and code = 4% of width
-- Code = 14% of height (auto-width to maintain aspect ratio)
+- Gap between cover and codes = 4% of width
+- **Spotify Code and URL QR-Code** displayed side-by-side below cover, each ~14% of height
 - Title/subtitle rendered below with proportional font sizing (3.5% and 2.5% of width)
+- QR-Code for URL generated via `generateQRCodeImage()` with dark theme (colorDark: '#0b1020')
 
 ### Error Handling Strategy
 - Server catches Spotify errors and returns `{ error: "<message>" }` JSON
@@ -85,9 +87,9 @@ The `generateComposite()` function uses proportional sizing:
 | File | Purpose | Key Functions |
 |------|---------|---|
 | `server.js` | HTTP server, Spotify integration | `getAccessToken()`, `handleSearch()`, `mapItem()`, `buildCodeUrl()` |
-| `public/app.js` | Search UI, history, canvas generation | `performSearch()`, `generateComposite()`, `renderResults()`, `loadHistory()` |
-| `public/index.html` | DOM structure (German labels) | Form controls, detail card template, canvas element |
-| `public/styles.css` | Dark theme with Spotify green accent | Responsive grid, card layout, detail panel styling |
+| `public/app.js` | Search UI, history, canvas generation | `performSearch()`, `generateComposite()`, `generateQRCodeImage()`, `renderResults()`, `loadHistory()` |
+| `public/index.html` | DOM structure (German labels) | Form controls, detail card template with dual QR-code preview, canvas element |
+| `public/styles.css` | Dark theme with Spotify green accent | Responsive grid, card layout, detail panel styling, `.detail__codes` dual code display |
 | `dev-env.bat` | Environment variables for local dev | Sets `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
 | `package.json` | Project metadata & start script | Calls `dev-env.bat` before running server |
 
@@ -96,6 +98,7 @@ The `generateComposite()` function uses proportional sizing:
 ## Integration Points & External Dependencies
 
 - **Spotify Web API:** Requires valid client credentials; endpoints: `/api/token`, `/v1/search`, `/scannables.scdn.co/uri/plain/png/...`
+- **QRCode.js library:** CDN-loaded JavaScript library for generating URL QR-codes (https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js)
 - **LocalStorage API:** Stores search history; capacity depends on browser (typically 5–10 MB)
 - **Canvas API:** Draws composite images; uses `loadImage()` helper to handle CORS and async loading
 - **fetch API:** All HTTP requests use modern fetch, not XMLHttpRequest

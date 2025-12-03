@@ -158,18 +158,23 @@ async function handleSearch(req, res, urlObj) {
   const data = await response.json();
   const results = [];
 
-  if (data.albums?.items) {
-    data.albums.items.forEach((item) => results.push(mapItem(item, 'album')));
-  }
-  if (data.artists?.items) {
-    data.artists.items.forEach((item) => results.push(mapItem(item, 'artist')));
-  }
-  if (data.playlists?.items) {
-    data.playlists.items.forEach((item) => results.push(mapItem(item, 'playlist')));
-  }
-  if (data.tracks?.items) {
-    data.tracks.items.forEach((item) => results.push(mapItem(item, 'track')));
-  }
+  const pushIfValid = (items, type) => {
+    if (!Array.isArray(items)) return;
+    for (const item of items) {
+      if (!item) continue;
+      try {
+        const mapped = mapItem(item, type);
+        if (mapped) results.push(mapped);
+      } catch (err) {
+        console.error(`Fehler beim Verarbeiten eines ${type}-Items:`, err);
+      }
+    }
+  };
+
+  pushIfValid(data.albums?.items, 'album');
+  pushIfValid(data.artists?.items, 'artist');
+  pushIfValid(data.playlists?.items, 'playlist');
+  pushIfValid(data.tracks?.items, 'track');
 
   respondJson(res, 200, {
     query,

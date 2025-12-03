@@ -70,14 +70,23 @@
         <div class="detail">
           <div class="detail__preview">
             <img id="detail-cover" alt="Album Cover" />
-            <img id="detail-code" alt="Spotify Code" />
+            <div class="detail__codes">
+              <div class="detail__code-item">
+                <p class="detail__code-label">Spotify Code</p>
+                <img id="detail-code" alt="Spotify Code" />
+              </div>
+              <div class="detail__code-item">
+                <p class="detail__code-label">URL QR-Code</p>
+                <div id="detail-qr" class="detail__qr"></div>
+              </div>
+            </div>
           </div>
           <div class="detail__settings">
             <div class="form-control">
               <label for="resolution">Auflösung</label>
               <select id="resolution">
                 <option value="1080x1920">1080 x 1920 (Poster Hochformat)</option>
-                <option value="1200x1200">1200 x 1200 (Quadrat)</option>
+                  <option value="1200x1200" selected>1200 x 1200 (Quadrat)</option>
                 <option value="1600x900">1600 x 900 (Querformat)</option>
                 <option value="2480x3508">2480 x 3508 (A4 @ 300 DPI)</option>
                 <option value="3508x4961">3508 x 4961 (A3 @ 300 DPI)</option>
@@ -101,6 +110,7 @@
     </main>
 
     <footer class="footer">Entwickelt für Spotify Fans – Cover & Code zum Ausdrucken.</footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="/app.js" type="module"></script>
   </body>
 </html>
